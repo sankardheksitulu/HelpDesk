@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  resources :bills
+  resources :comments
+  resources :tickets
   devise_for :users
 
   devise_scope :user do

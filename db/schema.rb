@@ -11,10 +11,36 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150519045332) do
+ActiveRecord::Schema.define(version: 20150519183322) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "bills", force: :cascade do |t|
+    t.integer  "user_id"
+    t.datetime "bill_date"
+    t.string   "pdf_url"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "comments", force: :cascade do |t|
+    t.string   "message"
+    t.integer  "user_id"
+    t.integer  "ticket_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "tickets", force: :cascade do |t|
+    t.string   "category"
+    t.integer  "user_id"
+    t.string   "description"
+    t.string   "status"
+    t.datetime "ticket_date"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: ""
@@ -30,6 +56,12 @@ ActiveRecord::Schema.define(version: 20150519045332) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "username"
+    t.string   "role"
+    t.string   "avenue_name"
+    t.string   "building_number"
+    t.string   "flat_number"
+    t.string   "first_name"
+    t.string   "last_name"
   end
 
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree

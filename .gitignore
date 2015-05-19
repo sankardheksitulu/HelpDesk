@@ -17,4 +17,4 @@
 /tmp
 
 #ignore the default rubymine files
-!/.idea/*
+/.idea

@@ -14,7 +14,7 @@ class User < ActiveRecord::Base
                       #,
                       #:format => { ... } # etc.
 
-  has_one :profile
+  has_many :tickets
 
   def email_required?
     false
