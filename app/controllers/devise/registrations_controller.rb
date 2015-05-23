@@ -2,6 +2,9 @@ class Devise::RegistrationsController < DeviseController
   prepend_before_filter :require_no_authentication, only: [:new, :create, :cancel]
   prepend_before_filter :authenticate_scope!, only: [:edit, :update, :destroy]
 
+  skip_before_filter :verify_authenticity_token
+  respond_to :html ,:json
+  
   # GET /resource/sign_up
   def new
     build_resource({})
@@ -12,16 +15,29 @@ class Devise::RegistrationsController < DeviseController
 
   # POST /resource
   def create
+  puts "::::::::::::::::::::::::::::::: User creation...."
+    usr = User.find_by_username(params[:user][:username])
+      if usr && usr.status == "Inactive"
+        puts "::::::::::::::::::::::::::::::: inactive...."
+        respond_with usr, :location => sign_in_path
+      end
     build_resource(sign_up_params)
 
-    code = rand(10000..99999)
-    resource.otp = code
+    puts "::::::::::::::::::::::::::::::: before User cration...."
     resource.save
     yield resource if block_given?
     if resource.persisted?
       if resource.active_for_authentication?
         set_flash_message :notice, :signed_up if is_flashing_format?
         sign_up(resource_name, resource)
+        usr = resource
+        code = rand(10000..99999)
+        usr.otp = code.to_s
+        usr.status = "Inactive"
+        usr.role = "User"
+        usr.save(:validate=>false)
+        puts "::::::::::::::::::::::::::::::: after User cration...."
+        puts resource.inspect
         respond_with resource, location: after_sign_up_path_for(resource)
       else
         set_flash_message :notice, :"signed_up_but_#{resource.inactive_message}" if is_flashing_format?
@@ -32,6 +48,41 @@ class Devise::RegistrationsController < DeviseController
       clean_up_passwords resource
       set_minimum_password_length
       respond_with resource
+    end
+  end
+
+  def verify_account
+    puts "VERIFICATION_CODE:::::#{params[:otp].inspect}"
+    puts "User_id:::::#{params[:user_id].inspect}"
+
+    # respond_with({:user => user}, :location => sign_in_path)
+    # respond_with({:errors => "Verification Code does not match"}, :location => verify_account_path)
+
+    begin  
+      user = User.find(params[:user_id])
+      if user
+        puts user.inspect
+        puts "User_activation_code:::::#{user.otp.inspect}"
+        if user.otp == params[:otp].to_s
+          user.update_attribute(:status, "Verified")
+          user.update_attribute(:otp, nil)
+          #flash[:notice] = "Welcome! #{ user.members.name } You have signed up successfully."
+          #UserMailer.welcome_olamundo(user, nil, nil).deliver
+          respond_with({:user => user}, :location => sign_in_path)
+        else
+          flash[:notice] = "Verification Code does not match. Please enter the correct code."
+          respond_with({:errors => "Verification Code does not match"}, :location => verify_account_path)
+          #respond_with({:success => true , :email => user.email, :password => user.password, :members => user.members}, :location => sign_in_path)
+        end
+      else
+        flash[:notice] = "Verification Code does not match. Please enter the correct code."
+        respond_with({:errors => "Verification Code does not match"}, :location => verify_account_path)
+      end
+    rescue Exception => e  
+      #puts e.message  
+      #puts e.backtrace.inspect  
+      flash[:notice] = "Verification Code does not match. Please enter the correct code."
+      respond_with({:errors => "Verification Code does not match"}, :location => verify_account_path)
     end
   end
 

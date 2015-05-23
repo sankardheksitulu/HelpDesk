@@ -4,8 +4,9 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable, :authentication_keys => [:login]
 
-  attr_accessor :login, :role, :avenue_name, :building_number, :flat_number, :first_name, :last_name, :otp#, :activation_code, :status
-
+  attr_accessor :login#, :role, :avenue_name, :building_number, :flat_number, :first_name, :last_name, :otp, :status#, :activation_code, :status
+  attr_accessible :username, :password, :email, :password_confirmation, :role, :avenue_name, :building_number, :flat_number, :first_name, :last_name, :otp, :status#, :activation_code, :status
+  
   validates_presence_of :username
   validates :username,
             :uniqueness => {

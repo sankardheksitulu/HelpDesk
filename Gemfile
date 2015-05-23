@@ -10,6 +10,8 @@ gem 'devise'
 
 gem 'rails_admin'
 
+gem 'protected_attributes'
+
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
@@ -48,3 +50,4 @@ group :development, :test do
   gem 'spring'
 end
 
+gem 'protected_attributes'

@@ -62,6 +62,8 @@ ActiveRecord::Schema.define(version: 20150519183322) do
     t.string   "flat_number"
     t.string   "first_name"
     t.string   "last_name"
+    t.string   "otp"
+    t.string   "status"
   end
 
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree

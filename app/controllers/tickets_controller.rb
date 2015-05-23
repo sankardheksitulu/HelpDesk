@@ -6,7 +6,15 @@ class TicketsController < ApplicationController
   # GET /tickets
   # GET /tickets.json
   def index
-    @tickets = Ticket.all
+    @tickets = Array.new
+    if params[:user_id]
+      usr = User.find(params[:user_id])
+      if usr
+        @tickets = usr.tickets
+      end
+    else
+      @tickets = Ticket.all
+    end
   end
 
   # GET /tickets/1
@@ -27,7 +35,8 @@ class TicketsController < ApplicationController
   # POST /tickets.json
   def create
     @ticket = Ticket.new(ticket_params)
-
+    #@ticket.user_id = params[:user_id]
+    @ticket.ticket_date = DateTime.now
     respond_to do |format|
       if @ticket.save
         format.html { redirect_to @ticket, notice: 'Ticket was successfully created.' }

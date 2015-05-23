@@ -6,6 +6,7 @@ class AddProfileDetailsToUsers < ActiveRecord::Migration
     add_column :users, :flat_number, :string
     add_column :users, :first_name, :string
     add_column :users, :last_name, :string
-    add_column :users, :otp, :integer
+    add_column :users, :otp, :string
+    add_column :users, :status, :string
   end
 end

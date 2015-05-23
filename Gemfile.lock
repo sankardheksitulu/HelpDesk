@@ -98,6 +98,8 @@ GEM
       mini_portile (~> 0.6.0)
     orm_adapter (0.5.0)
     pg (0.18.2)
+    protected_attributes (1.0.9)
+      activemodel (>= 4.0.1, < 5.0)
     rack (1.6.1)
     rack-pjax (0.8.0)
       nokogiri (~> 1.5)
@@ -194,6 +196,7 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails
   pg
+  protected_attributes
   rails (= 4.2.1)
   rails_admin
   sass-rails (~> 5.0)
