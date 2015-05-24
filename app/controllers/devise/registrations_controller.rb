@@ -16,26 +16,30 @@ class Devise::RegistrationsController < DeviseController
   # POST /resource
   def create
   puts "::::::::::::::::::::::::::::::: User creation...."
-    usr = User.find_by_username(params[:user][:username])
-      if usr && usr.status == "Inactive"
-        puts "::::::::::::::::::::::::::::::: inactive...."
-        respond_with usr, :location => sign_in_path
-      end
+    # usr = User.find_by_username(params[:user][:username])
+    #   if usr && usr.status == "Inactive"
+    #     puts "::::::::::::::::::::::::::::::: inactive...."
+    #     respond_with usr, :location => sign_in_path
+    #   end
     build_resource(sign_up_params)
 
     puts "::::::::::::::::::::::::::::::: before User cration...."
+    code = rand(10000..99999)
+    resource.otp = code.to_s
+    resource.status = "Inactive"
+    resource.role = "User"
     resource.save
     yield resource if block_given?
     if resource.persisted?
       if resource.active_for_authentication?
         set_flash_message :notice, :signed_up if is_flashing_format?
         sign_up(resource_name, resource)
-        usr = resource
-        code = rand(10000..99999)
-        usr.otp = code.to_s
-        usr.status = "Inactive"
-        usr.role = "User"
-        usr.save(:validate=>false)
+        # usr = resource
+        # code = rand(10000..99999)
+        # usr.otp = code.to_s
+        # usr.status = "Inactive"
+        # usr.role = "User"
+        # usr.save(:validate=>false)
         puts "::::::::::::::::::::::::::::::: after User cration...."
         puts resource.inspect
         respond_with resource, location: after_sign_up_path_for(resource)
