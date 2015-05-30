@@ -7,10 +7,15 @@ class TicketsController < ApplicationController
   # GET /tickets.json
   def index
     @tickets = Array.new
-    if params[:user_id]
+    if params[:user_id] && params[:next]
       usr = User.find(params[:user_id])
       if usr
-        @tickets = usr.tickets
+        @tickets = usr.tickets.limit(params[:next].to_i)
+        if params[:status] == "All"
+          @tickets = usr.tickets.limit(params[:next].to_i)
+        else
+          @tickets = usr.tickets.where(:status => params[:status]).limit(params[:next].to_i)
+        end
       end
     else
       @tickets = Ticket.all

@@ -59,35 +59,39 @@ class Devise::RegistrationsController < DeviseController
     puts "VERIFICATION_CODE:::::#{params[:otp].inspect}"
     puts "User_id:::::#{params[:user_id].inspect}"
 
-    # respond_with({:user => user}, :location => sign_in_path)
-    # respond_with({:errors => "Verification Code does not match"}, :location => verify_account_path)
-
-    begin  
-      user = User.find(params[:user_id])
-      if user
-        puts user.inspect
-        puts "User_activation_code:::::#{user.otp.inspect}"
-        if user.otp == params[:otp].to_s
-          user.update_attribute(:status, "Verified")
-          user.update_attribute(:otp, nil)
-          #flash[:notice] = "Welcome! #{ user.members.name } You have signed up successfully."
-          #UserMailer.welcome_olamundo(user, nil, nil).deliver
-          respond_with({:user => user}, :location => sign_in_path)
-        else
-          flash[:notice] = "Verification Code does not match. Please enter the correct code."
-          respond_with({:errors => "Verification Code does not match"}, :location => verify_account_path)
-          #respond_with({:success => true , :email => user.email, :password => user.password, :members => user.members}, :location => sign_in_path)
-        end
+    user = User.find(params[:user_id])
+    if user
+      puts user.inspect
+      puts "User_activation_code:::::#{user.otp.inspect}"
+      if user.otp == params[:otp].to_s
+        user.update_attribute(:status, "Verified")
+        # user.update_attribute(:otp, nil)
+        #flash[:notice] = "Welcome! #{ user.members.name } You have signed up successfully."
+        #UserMailer.welcome_olamundo(user, nil, nil).deliver
+        respond_with user, location: sign_in_path
+        puts "successfully update :::::::::::::::::::::::"
       else
         flash[:notice] = "Verification Code does not match. Please enter the correct code."
         respond_with({:errors => "Verification Code does not match"}, :location => verify_account_path)
+        #respond_with({:success => true , :email => user.email, :password => user.password, :members => user.members}, :location => sign_in_path)
       end
-    rescue Exception => e  
-      #puts e.message  
-      #puts e.backtrace.inspect  
+    else
       flash[:notice] = "Verification Code does not match. Please enter the correct code."
       respond_with({:errors => "Verification Code does not match"}, :location => verify_account_path)
     end
+  end
+
+  def resend_otp
+    puts "User_id:::::#{params[:user_id].inspect}"
+
+    user = User.find(params[:user_id])
+    puts "sfasf"
+    if user
+      respond_with({:success => true})
+    else
+      respond_with({:errors => "user not found"}, :location => verify_account_path)
+    end
+
   end
 
   # GET /resource/edit

@@ -10,6 +10,7 @@ Rails.application.routes.draw do
     get "sign_up", :to => "devise/registrations#new"
     get "sign_out", :to => "devise/sessions#destroy"
     get "verify_account", :to => "devise/registrations#verify_account"
+    get "resend_otp", :to => "devise/registrations#resend_otp"
   end
 
   # The priority is based upon order of creation: first created -> highest priority.
