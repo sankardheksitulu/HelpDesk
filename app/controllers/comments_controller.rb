@@ -6,7 +6,12 @@ class CommentsController < ApplicationController
   # GET /comments
   # GET /comments.json
   def index
-    @comments = Comment.all
+    if params[:ticket_id]
+      ticket = Ticket.find(params[:ticket_id].to_i)
+      @comments = ticket.comments
+    else
+      @comments = Comment.all
+    end
   end
 
   # GET /comments/1

@@ -13,6 +13,13 @@ Rails.application.routes.draw do
     get "resend_otp", :to => "devise/registrations#resend_otp"
   end
 
+  get 'all_tickets', :to => "tickets#all_tickets"
+  # resources :tickets do
+  #     collection do
+  #       get 'all_tickets'
+  #     end
+  #   end
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
