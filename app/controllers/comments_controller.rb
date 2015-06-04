@@ -1,4 +1,6 @@
 class CommentsController < ApplicationController
+  before_filter :authenticate_user, :only => [:show]
+
   before_action :set_comment, only: [:show, :edit, :update, :destroy]
 
   respond_to :html ,:json
