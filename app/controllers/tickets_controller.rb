@@ -1,6 +1,6 @@
 class TicketsController < ApplicationController
 
-  before_filter :authenticate_user, :only => [:show]
+  before_filter :authenticate_user, :only => [:destroy]
   
   before_action :set_ticket, only: [:show, :edit, :update, :destroy]
 
