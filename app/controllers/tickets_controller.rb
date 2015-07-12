@@ -28,7 +28,30 @@ class TicketsController < ApplicationController
   end
 
   def all_tickets
-      @tickets = Ticket.all
+      # dateformat = "mm-dd-yyyy"
+      from_date = Date.strptime(params[:from_date], "%d-%m-%Y")
+      to_date = Date.strptime(params[:to_date], "%d-%m-%Y")
+      status_arr = JSON.parse params[:status_arr]
+      prev = params[:prev].to_i
+      nxt = params[:next].to_i
+      puts ":::::::::::::::::::::::::::: DETAILS"
+      puts from_date
+      puts to_date
+      puts status_arr.inspect
+      puts status_arr.size
+      puts params[:category]
+
+      if status_arr[0] == "All"
+        puts "::::::::::::::: count 1 with All"        
+        @tickets = Ticket.all.where("created_at > ? and created_at < ? and category = ?", from_date, to_date, params[:category] )[prev..nxt]
+      elsif status_arr.size == 1
+        puts "::::::::::::::: count 1 but not All"        
+        @tickets = Ticket.all.where("created_at > ? and created_at < ? and category = ? and status = ?", from_date, to_date, params[:category], status_arr[0] )[prev..nxt]
+      elsif status_arr.size == 2
+        puts "::::::::::::::: count 2"        
+        @tickets = Ticket.all.where("created_at > ? and created_at < ? and category = ? and status = ? or status = ?", from_date, to_date, params[:category], status_arr[0], status_arr[0] )[prev..nxt]
+      end
+      # @tickets = Ticket.all
       respond_with @tickets
   end
 
