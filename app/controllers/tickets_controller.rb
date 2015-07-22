@@ -25,6 +25,7 @@ class TicketsController < ApplicationController
     else
       @tickets = Ticket.all
     end
+    @tickets = @tickets.reverse
   end
 
   def all_tickets
