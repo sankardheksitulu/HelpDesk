@@ -23,7 +23,7 @@ class TicketsController < ApplicationController
         end
       end
     else
-      @tickets = Ticket.all
+      @tickets = Ticket.all.order( 'created_at DESC' )
     end
     #@tickets = @tickets.reverse
   end
@@ -44,13 +44,13 @@ class TicketsController < ApplicationController
 
       if status_arr[0] == "All"
         puts "::::::::::::::: count 1 with All"        
-        @tickets = Ticket.all.where("created_at > ? and created_at < ? and category = ?", from_date, to_date, params[:category] )[prev..nxt]
+        @tickets = Ticket.all.where("created_at > ? and created_at < ? and category = ?", from_date, to_date, params[:category] ).order( 'created_at DESC' )[prev..nxt]
       elsif status_arr.size == 1
         puts "::::::::::::::: count 1 but not All"        
-        @tickets = Ticket.all.where("created_at > ? and created_at < ? and category = ? and status = ?", from_date, to_date, params[:category], status_arr[0] )[prev..nxt]
+        @tickets = Ticket.all.where("created_at > ? and created_at < ? and category = ? and status = ?", from_date, to_date, params[:category], status_arr[0] ).order( 'created_at DESC' )[prev..nxt]
       elsif status_arr.size == 2
         puts "::::::::::::::: count 2"        
-        @tickets = Ticket.all.where("created_at > ? and created_at < ? and category = ? and status = ? or status = ?", from_date, to_date, params[:category], status_arr[0], status_arr[0] )[prev..nxt]
+        @tickets = Ticket.all.where("created_at > ? and created_at < ? and category = ? and status = ? or status = ?", from_date, to_date, params[:category], status_arr[0], status_arr[0] ).order( 'created_at DESC' )[prev..nxt]
       end
       # @tickets = Ticket.all
       respond_with @tickets
