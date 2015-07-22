@@ -15,17 +15,17 @@ class TicketsController < ApplicationController
       nxt = params[:next].to_i
       usr = User.find(params[:user_id])
       if usr
-        @tickets = usr.tickets[prev..nxt]
+        @tickets = usr.tickets.order( 'created_at DESC' )[prev..nxt]
         if params[:status] == "All"
-          @tickets = usr.tickets[prev..nxt]
+          @tickets = usr.tickets.order( 'created_at DESC' )[prev..nxt]
         else
-          @tickets = usr.tickets.where(:status => params[:status])[prev..nxt]
+          @tickets = usr.tickets.where(:status => params[:status]).order( 'created_at DESC' )[prev..nxt]
         end
       end
     else
       @tickets = Ticket.all
     end
-    @tickets = @tickets.reverse
+    #@tickets = @tickets.reverse
   end
 
   def all_tickets
