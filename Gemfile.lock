@@ -195,6 +195,7 @@ DEPENDENCIES
   devise
   jbuilder (~> 2.0)
   jquery-rails
+  mail
   pg
   protected_attributes
   rails (= 4.2.1)

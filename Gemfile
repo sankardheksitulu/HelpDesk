@@ -10,6 +10,8 @@ gem 'devise'
 
 gem 'rails_admin'
 
+gem 'mail'
+
 gem 'protected_attributes'
 
 # Use SCSS for stylesheets

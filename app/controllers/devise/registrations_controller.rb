@@ -41,6 +41,7 @@ class Devise::RegistrationsController < DeviseController
         # usr.role = "User"
         # usr.save(:validate=>false)
         puts "::::::::::::::::::::::::::::::: after User cration...."
+        UserMailer.opt_email(user).deliver
         puts resource.inspect
         respond_with resource, location: after_sign_up_path_for(resource)
       else
@@ -85,8 +86,8 @@ class Devise::RegistrationsController < DeviseController
     puts "User_id:::::#{params[:user_id].inspect}"
 
     user = User.find(params[:user_id])
-    puts "sfasf"
     if user
+      UserMailer.opt_email(user).deliver
       respond_with({:success => true})
     else
       respond_with({:errors => "user not found"}, :location => verify_account_path)
