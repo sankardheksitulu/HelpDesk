@@ -41,7 +41,7 @@ class Devise::RegistrationsController < DeviseController
         # usr.role = "User"
         # usr.save(:validate=>false)
         puts "::::::::::::::::::::::::::::::: after User cration...."
-        UserMailer.opt_email(user).deliver
+        # UserMailer.opt_email(user).deliver
         puts resource.inspect
         respond_with resource, location: after_sign_up_path_for(resource)
       else
